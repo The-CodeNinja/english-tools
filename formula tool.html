@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Formula tool</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <style>
+        .inputs {
+            width: inherit;
+            text-align: center;
+        }
+
+        
+        .formula {
+            text-align: center;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container my-5">
+        <div class="container form-group my-5">
+            <div class="row my-1">
+                <div class="dropdown col-4" id="drop1" value="0">
+                    <button type="button" id="drop1btn" class="btn btn-block btn-primary dropdown-toggle"
+                        data-toggle="dropdown">
+                        Existence
+                    </button>
+                    <div class="dropdown-menu" id="drop1opt">
+                        <h4 class="dropdown-header">Milestones</h4>
+                        <a class="dropdown-item" href="#" onclick="typeChange(0)">Existence</a>
+                        <a class="dropdown-item" href="#" onclick="typeChange(1)">Possession</a>
+                        <a class="dropdown-item" href="#" onclick="typeChange(2)">Action</a>
+                        <a class="dropdown-item" href="#" onclick="typeChange(3)">Ability</a>
+                        <hr/>
+                        <h4 class="dropdown-header">Others</h4>
+                        <a class="dropdown-item" href="#" onclick="typeChange(4)">Could Have</a>
+                        <a class="dropdown-item" href="#" onclick="typeChange(5)">Should</a>
+                        <a class="dropdown-item" href="#" onclick="typeChange(6)">Should have</a>
+                        <a class="dropdown-item" href="#" onclick="typeChange(7)">Would</a>
+                        <a class="dropdown-item" href="#" onclick="typeChange(8)">Would have</a>
+                        <a class="dropdown-item" href="#" onclick="typeChange(9)">May</a>
+ 
+                    </div>
+                </div>
+                <div class="dropdown col-4" id="drop2" value="0">
+                    <button type="button" id="drop2btn" class="btn btn-block btn-primary dropdown-toggle"
+                        data-toggle="dropdown">
+                        Simple
+                    </button>
+                    <div class="dropdown-menu" id="drop2opt">
+                        <a class="dropdown-item" href="#" onclick="action(0)">Simple</a>
+                        <a class="dropdown-item" href="#" onclick="action(1)">Continuous</a>
+                        <a class="dropdown-item" href="#" onclick="action(2)">Perfect</a>
+                        <a class="dropdown-item" href="#" onclick="action(3)">Continuous Perfect</a>
+                    </div>
+                </div>
+                <div class="dropdown col-4" id="drop3" value="0">
+                    <button type="button" id="drop3btn" class="btn btn-block btn-primary dropdown-toggle"
+                        data-toggle="dropdown">
+                        Present Tense
+                    </button>
+                    <div class="dropdown-menu" id="drop3opt">
+                        <a class="dropdown-item" href="#" onclick="tense(0)">Present Tense</a>
+                        <a class="dropdown-item" href="#" onclick="tense(1)">Past Tense</a>
+                        <a class="dropdown-item" href="#" onclick="tense(2)">Future Tense</a>
+                    </div>
+                </div>
+            </div>
+            <input class="form-control inputs mx-1" type="text" placeholder="Marathi example">
+            <div class="row  m-1">
+                <button class="col-1 btn btn-primary" onclick="prev()"> &lt; </button>
+                <span class="col-10 formula" id="formula" value="0"></span>
+                <button class="col-1 btn btn-primary" onclick="next()"> &gt;</button>
+            </div>
+            <input class="form-control inputs" type="text" placeholder="English translation">
+        </div>
+    </div>
+
+    <script>
+
+        const formObj = {
+            "length": 10,
+            "0": {
+                "title": "Existence",
+                "subtypes": {
+                    "length": 3,
+                    "0": {
+                        "title": "Present Tense",
+                        "formulae": [
+                            "Subject  + am/is/are + RW.",
+                            "Subject + am/is/are + not + RW.",
+                            "Am/Is/Are + subject + RW + ?",
+                            "Am/Is/Are + subject + not + RW + ?"
+                        ]
+                    },
+
+                    "1": {
+                        "title": "Past Tense",
+                        "formulae": [
+
+                            "Subject  + was/were + RW.",
+                            "Subject + was/were + not + RW.",
+                            "Was/Were + subject + RW + ?",
+                            "Was/Were + subject + not + RW + ?"
+                        ]
+                    },
+                    "2": {
+                        "title": "Future Tense",
+                        "formulae": [
+
+                            "Subject  + shall/will + be + RW.",
+                            "Subject + shall/will + not be + RW.",
+                            "Shall/Will + subject + be + RW + ?",
+                            "Shall/Will + subject + not be + RW + ?"
+                        ]
+                    }
+                }
+            },
+            "1": {
+                "title": "Possession",
+                "subtypes": {
+                    "length": 3,
+
+                    "0": {
+                        "title": "Present Tense",
+                        "formulae": [
+                            "Subject  + have/has + RW.",
+                            "Subject + do/does + not have + RW.",
+                            "Do/Does + subject + have + RW + ?",
+                            "Do/Does + subject + not have + RW + ?",
+                            "Subject + have/has + RW.",
+                            "Subject + have/has + not + RW.",
+                            "Have/Has + subject + RW + ?",
+                            "Have/Has + subject + not + RW + ?"
+                        ]
+                    },
+                    "1": {
+                        "title": "Past Tense",
+                        "formulae": [
+                            "Subject  + had + RW.",
+                            "Subject + did not have + RW.",
+                            "Did + subject + have + RW + ?",
+                            "Did + subject + not have + RW + ?"
+                        ]
+                    },
+                    "2": {
+                        "title": "Future Tense",
+                        "formulae": [
+                            "Subject  + shall/will + have + RW.",
+                            "Subject + shall/will + not have + RW.",
+                            "Shall/Will + subject + have + RW + ?",
+                            "Shall/Will + subject + not have + RW + ?"
+                        ]
+                    }
+                }
+            },
+            "2": {
+                "title": "Action",
+                "subtypes": {
+                    "length": 4,
+
+
+                    "0": {
+                        "title": "Simple",
+                        "subtypes": {
+                            "length": 3,
+
+                            "0": {
+                                "title": "Present Tense",
+                                "formulae": [
+                                    "Subject  + V.1 (s/es) + RW.",
+                                    "Subject + do/does + not + V.1 + RW.",
+                                    "Do/Does + subject + V.1 + RW + ?",
+                                    "Do/Does + subject + not + V.1 + RW + ?"
+                                ]
+                            },
+                            "1": {
+                                "title": "Past Tense",
+                                "formulae": [
+                                    "Subject  + V.2 + RW.",
+                                    "Subject + did not + V.1 + RW.",
+                                    "Did + subject + V.1 + RW + ?",
+                                    "Did + subject + not + V.1 + RW + ?"
+                                ]
+                            },
+                            "2": {
+                                "title": "Future Tense",
+                                "formulae": [
+                                    "Subject  + shall/will + V.1 + RW.",
+                                    "Subject + shall/will + not + V.1 + RW.",
+                                    "Shall/Will + subject + V.1 + RW + ?",
+                                    "Shall/Will + subject + not + V.1 + RW + ?"
+                                ]
+                            }
+                        }
+                    },
+
+                    "1": {
+                        "title": "Continuous",
+                        "subtypes": {
+                            "length": 3,
+
+                            "0": {
+                                "title": "Present Tense",
+                                "formulae": [
+                                    "Subject  + am/is/are + V.4 + RW.",
+                                    "Subject + am/is/are + not + V.4 + RW.",
+                                    "Am/Is/Are + subject + V.4 + RW + ?",
+                                    "Am/Is/Are + subject + not + V.4 + RW + ?"
+                                ]
+                            },
+                            "1": {
+                                "title": "Past Tense",
+                                "formulae": [
+                                    "Subject  + was/were + V.4 + RW.",
+                                    "Subject + was/were + not + V.4 + RW.",
+                                    "Was/Were + subject + V.4 + RW + ?",
+                                    "Was/Were + subject + not + V.4 + RW + ?"
+                                ]
+                            },
+                            "2": {
+                                "title": "Future Tense",
+                                "formulae": [
+                                    "Subject  + shall/will + be + V.4 + RW.",
+                                    "Subject + shall/will + not be + V.4 + RW.",
+                                    "Shall/Will + subject + be + V.4 + RW + ?",
+                                    "Shall/Will + subject + not be + V.4 + RW + ?"
+                                ]
+                            }
+                        }
+                    },
+
+                    "2": {
+                        "title": "Perfect",
+                        "subtypes": {
+                            "length": 3,
+
+                            "0": {
+                                "title": "Present Tense",
+                                "formulae": [
+                                    "Subject  + have/has + V.3 + RW.",
+                                    "Subject + have/has + not + V.3 + RW.",
+                                    "Have/Has + subject + V.3 + RW + ?",
+                                    "Have/Has + subject + not + V.3 + RW + ?"
+                                ]
+                            },
+                            "1": {
+                                "title": "Past Tense",
+                                "formulae": [
+                                    "Subject  + had + V.3 + RW.",
+                                    "Subject + had not + V.3 + RW.",
+                                    "Had + subject + V.3 + RW + ?",
+                                    "Had + subject + not + V.3 + RW + ?"
+                                ]
+                            },
+                            "2": {
+                                "title": "Future Tense",
+                                "formulae": [
+                                    "Subject  + shall/will + have + V.3 + RW.",
+                                    "Subject + shall/will + not have + V.3 + RW.",
+                                    "Shall/Will + subject + have + V.3 + RW + ?",
+                                    "Shall/Will + subject + not have + V.3 + RW + ?"
+                                ]
+                            }
+                        }
+                    },
+
+                    "3": {
+                        "title": "Continuous Perfect",
+                        "subtypes": {
+                            "length": 3,
+
+                            "0": {
+                                "title": "Present Tense",
+                                "formulae": [
+                                    "Subject  + have/has + been + V.4 + RW.",
+                                    "Subject + have/has + not been + V.4 + RW.",
+                                    "Have/Has + subject + been + V.4 + RW + ?",
+                                    "Have/Has + subject + not been + V.4 + RW + ?"
+                                ]
+                            },
+                            "1": {
+                                "title": "Past Tense",
+                                "formulae": [
+                                    "Subject  + had been + V.4 + RW.",
+                                    "Subject + had not been + V.4 + RW.",
+                                    "Had + subject + been + V.4 + RW + ?",
+                                    "Had + subject + not been + V.4 + RW + ?"
+                                ]
+                            },
+                            "2": {
+                                "title": "Future Tense",
+                                "formulae": [
+                                    "Subject  + shall/will + have been + V.4 + RW.",
+                                    "Subject + shall/will + not have been + V.4 + RW.",
+                                    "Shall/Will + subject + have been + V.4 + RW + ?",
+                                    "Shall/Will + subject + not have been + V.4 + RW + ?"
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            "3": {
+                "title": "Ability",
+                "subtypes": {
+                    "length": 3,
+
+                    "0": {
+                        "title": "Present Tense",
+                        "formulae": [
+                            "Subject + can + V.1 + RW.",
+                            "Subject + cannot + V.1 + RW.",
+                            "Can + subject + V.1 + RW + ?",
+                            "Can + subject + not + V.1 + RW + ?",
+                            "Subject + am/is/are + able to + V.1 + RW.",
+                            "Subject + am/is/are + not able to + V.1 + RW.",
+                            "Am/Is/Are + subject + able to + V.1 + RW + ?",
+                            "Am/Is/Are + subject + not able to + V.1 + RW + ?",
+                            "Subject + am/is/are + capable of + V.4 + RW.",
+                            "Subject + am/is/are + not capable of + V.4 + RW.",
+                            "Am/Is/Are + subject + capable of + V.4 + RW + ?",
+                            "Am/Is/Are + subject + not capable of + V.4 + RW + ?"
+                        ]
+                    },
+                    "1": {
+                        "title": "Past Tense",
+                        "formulae": [
+                            "Subject + could + V.1 + RW.",
+                            "Subject + could not + V.1 + RW.",
+                            "Could + subject + V.1 + RW + ?",
+                            "Could + subject + not + V.1 + RW + ?",
+                            "Subject + was/were + able to + V.1 + RW.",
+                            "Subject + was/were + not able to + V.1 + RW.",
+                            "Was/Were + subject + able to + V.1 + RW + ?",
+                            "Was/Were + subject + not able to + V.1 + RW + ?",
+                            "Subject + was/were + capable of + V.4 + RW.",
+                            "Subject + was/were + not capable of + V.4 + RW.",
+                            "Was/Were + subject + capable of + V.4 + RW + ?",
+                            "Was/Were + subject + not capable of + V.4 + RW + ?"
+                        ]
+                    },
+                    "2": {
+                        "title": "Future Tense",
+                        "formulae": [
+                            "Subject + shall/will + be able to + V.1 + RW.",
+                            "Subject + shall/will + not be able to + V.1 + RW.",
+                            "Shall/Will + subject + be able to + V.1 + RW + ?",
+                            "Shall/Will + subject + not be able to + V.1 + RW + ?",
+                            "Subject + shall/will + be capable of + V.4 + RW.",
+                            "Subject + shall/will + not be capable of + V.4 + RW.",
+                            "Shall/Will + subject + be capable of + V.4 + RW + ?",
+                            "Shall/Will + subject + not be capable of + V.4 + RW + ?"
+                        ]
+                    }
+                }
+            },
+            "4": {
+                "title": "Could Have",
+                "formulae": [
+                    "Subject  + could have + V.3 + RW.",
+                    "Subject + could not have + V.3 + RW.",
+                    "Could + subject + have + V.3 + RW + ?",
+                    "Could + subject + not have + V.3 + RW + ?"
+                ]
+            },
+
+            "5": {
+                "title": "Should",
+                "formulae": [
+                    "Subject + should + V.1 + RW.",
+                    "Subject + should not + V.1 + RW.",
+                    "Should + subject + V.1 + RW + ?",
+                    "Should + subject + not + V.1 + RW + ?"
+                ]
+            },
+
+            "6": {
+                "title": "Should have",
+                "formulae": [
+                    "Subject  + should have + V.3 + RW.",
+                    "Subject + should not have + V.3 + RW.",
+                    "Should + subject + have + V.3 + RW + ?",
+                    "Should + subject + not have + V.3 + RW + ?"
+                ]
+            },
+            "7": {
+                "title": "Would",
+                "formulae": [
+                    "Subject  + would + V.1 + RW.",
+                    "Subject + would not + V.1 + RW.",
+                    "Would + subject + V.1 + RW + ?",
+                    "Would + subject + not + V.1 + RW + ?"
+                ]
+            },
+            "8": {
+                "title": "Would have",
+                "formulae": [
+                    "Subject  + would have + V.3 + RW.",
+                    "Subject + would not have + V.3 + RW.",
+                    "Would + subject + have + V.3 + RW + ?",
+                    "Would + subject + not have + V.3 + RW + ?"
+                ]
+            },
+            "9": {
+                "title": "May",
+                "formulae": [
+                    "Subject  + may + V.1 + RW.",
+                    "Subject + may not + V.1 + RW.",
+                    "May + subject + V.1 + RW + ?",
+                    "May + subject + not + V.1 + RW + ?"
+                ]
+            }
+        }
+
+
+        var drop1 = document.getElementById("drop1")
+        var drop2 = document.getElementById("drop2")
+        var drop3 = document.getElementById("drop3")
+        var formulaHolder = document.getElementById("formula")
+       
+        var drop1btn = document.getElementById("drop1btn")
+        var drop2btn = document.getElementById("drop2btn")
+        var drop3btn = document.getElementById("drop3btn")
+                        //milestone, action type, tense, formula indexes
+        var current = [parseInt(drop1.getAttribute("value")), parseInt(drop2.getAttribute("value")), parseInt(drop3.getAttribute("value")), parseInt(formulaHolder.getAttribute("value"))] 
+
+
+        function hide(n2,n3){
+            drop2.style.display = n2? "block": "none"
+            drop3.style.display = n3? "block": "none"
+            // console.log(n2,n3)
+        }
+        function typeChange(ind){
+            drop1btn.innerText= formObj[ind].title
+            current[0] = ind
+            switch(ind){
+                case 0:
+                    hide(0,1)
+                    break
+                case 1:
+                    hide(0,1)
+                    break
+                case 2:
+                    hide(1,1)
+                    break
+                case 3:
+                    hide(0,1)
+                    break
+                case 4:
+                    hide(0,0)
+                    break
+                case 5:
+                    hide(0,0)
+                    break
+                case 6:
+                    hide(0,0)
+                    break
+                case 7:
+                    hide(0,0)
+                    break
+                case 8:
+                    hide(0,0)
+                    break
+                case 9:
+                    hide(0,0)
+                    break
+            }
+            display()
+
+        }
+        function action(ind){
+            current[1] = ind
+            drop2btn.innerText= formObj[2].subtypes[ind].title
+            display()
+
+        }
+
+        function tense(ind){
+            current[2] = ind
+
+            switch(ind){
+                case 0:
+                    drop3btn.innerText= "Present Tense"
+                    break
+                case 1:
+                    drop3btn.innerText= "Past Tense"
+                    break
+                case 2:
+                    drop3btn.innerText= "Future Tense"
+                    break
+            }
+            display()
+
+        }
+
+        const next = () => {
+            current[3] = (current[3] + 1)%4 //to keep the value bw 0-3
+            display()
+            console.log("next")
+        }
+        const prev = () => {
+            current[3] = Math.abs(current[3] - 1)%4 //to keep the value bw 0-3
+            display()          
+            console.log("prev")
+        }
+
+        const display = () =>{
+            var a = current[0]  //type
+            var b = current[1]  //action type
+            var c = current[2]  //tense
+            var d = current[3]  //formula no
+            console.log(current)
+            switch(a){
+                case 0:
+                case 1:
+                case 3:
+                    formulaHolder.innerHTML = formObj[a].subtypes[c].formulae[d]
+                    console.log(formObj[a].subtypes[c].formulae[d])
+                    break
+                case 2:
+                    formulaHolder.innerHTML = formObj[a].subtypes[b].subtypes[c].formulae[d]
+                    console.log(formObj[a].subtypes[b].subtypes[c].formulae[d])
+                    break
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                formulaHolder.innerHTML = formObj[a].formulae[d]
+                console.log(formObj[a].formulae[d])
+                break
+
+            }
+        }
+    </script>
+
+</body>
+
+</html>
